@@ -1,13 +1,37 @@
+This is a fork of https://github.com/x0st/casual-git/network
+
+### How to install
+
+1. `git clone https://github.com/trozware/casual-git.git`
+2. `cd casual-git`
+3. `make`
+4. Invoke the `gh` command within git repositories to open `casual-git`
+
+### What did I want to change:
+
+1. Add `git status`.
+2. Make the process into a repeating loop as I normally run several git commands in a session, interspersed with calls to `git status`.
+3. Implement a `git add .` option as the lazy way to avoid having to specify the files individually.
+4. Remove commands I rarely use.
+5. Allow creation of new branches and deletion of old branches.
+6. Add `git merge`.
+
+---
+
+# Original ReadMe
+
 ## What is that?
-*casual-git* is a bash script that helps you to automate interaction with Git. It's a wrapper for Git.
+
+_casual-git_ is a bash script that helps you to automate interaction with Git. It's a wrapper for Git.
 
 It can:
-- `git push` or `git pull` or `git log` or `git commit` or `git commit --amend --no-edit` by only pressing 4 keys
-- `git push --force` or `git pull` + `git reset --hard origin/HEAD` by only pressing 5 keys
-- switch to a branch if you only remember a part of the full name
-- switch to one of branches matching a pattern
-- make a commit containing long file names with no need to enter them at all
-- fast and easily rebase onto a commit to modify its name or files
+
+* `git push` or `git pull` or `git log` or `git commit` or `git commit --amend --no-edit` by only pressing 4 keys
+* `git push --force` or `git pull` + `git reset --hard origin/HEAD` by only pressing 5 keys
+* switch to a branch if you only remember a part of the full name
+* switch to one of branches matching a pattern
+* make a commit containing long file names with no need to enter them at all
+* fast and easily rebase onto a commit to modify its name or files
 
 ```
   d  - push
@@ -22,9 +46,10 @@ It can:
   m  - modify commit
 ```
 
-It is hardcoded to work with *origin* only .
+It is hardcoded to work with _origin_ only .
 
 ## How to install
+
 1. `git clone https://github.com/x0st/casual-git`
 2. `cd casual-git`
 3. `make`
@@ -33,6 +58,7 @@ It is hardcoded to work with *origin* only .
 ## Some examples of usage
 
 ### Smart commit
+
 ```
   d  - push
   f  - push --force
@@ -43,22 +69,24 @@ It is hardcoded to work with *origin* only .
   s  - commit --smart
   l  - log --pretty
   h  - checkout --smart
-  
-  Delete files from the next commit: 
+
+  Delete files from the next commit:
   [-1] new file: test1
-  
-  Add files to the next commit: 
+
+  Add files to the next commit:
   [1] modified:  gulpfile.js
   [2] modified:  package.json
   [3] untracked: test
-  
+
   Enter file numbers separating by spaces: -1 2 3
-  
+
   Enter a comment: my commit
 ```
 
 ### Smart branch switching
+
 The `S`/`s` `W`/`w` keys are available for pagination.
+
 ```
   d  - push
   f  - push --force
@@ -88,12 +116,14 @@ The `S`/`s` `W`/`w` keys are available for pagination.
   [7] Improvement_web_2689
   [8] Release_2.1.9.64_20140801_hotfix
   [9] Release_2.1.9.70_20140807_hotfix
-  
+
 Switched to branch 'feature/EGNYTE-20-watermarks-over-documents'
 ```
 
 ### Commit modification
+
 The `S`/`s` `W`/`w` keys are available for pagination.
+
 ```
   d  - push
   f  - push --force
@@ -116,5 +146,4 @@ The `S`/`s` `W`/`w` keys are available for pagination.
   [7] bb8dd1d15 - fixed function call in expired invite cron
   [8] 62eee0417 - fixed function call in expired invite cron
   [9] 45ee1676e - Merge branch 'master' into feature-active
-
 ```
