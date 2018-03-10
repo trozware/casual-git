@@ -143,22 +143,30 @@ function _command_git_add_all() {
 
 function _command_git_commit() {
   local -a _comment
+  local status
+  local len_status
 
-  _print_empty_line
-  _print_input_request_message "If applied, this commit will: "
+  status=`_git_status_short`
+  len_status=${#status}
 
-  read _comment
-
-  if [[ -n ${_comment} ]];
+  if [ $len_status -lt 2 ]
   then
-    git commit -m "${_comment}"
+    _print_startline_message "Nothing to commit, working tree clean"
+  else
+    _print_input_request_message "If applied, this commit will: "
+
+    read _comment
+
+    if [[ -n ${_comment} ]];
+    then
+      git commit -am "${_comment}"
+    fi
   fi
 }
 
 function _command_new_branch() {
   local -a _branch_name
 
-  _print_empty_line
   _print_input_request_message "Create new branch named: "
 
   read _branch_name
