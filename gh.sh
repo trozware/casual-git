@@ -67,6 +67,7 @@ function _print_newline_message() {
   printf "  $1\n"
 }
 
+# Prints a message with a line break but no leading spaces.
 function _print_startline_message() {
   printf "$1\n"
 }
@@ -88,6 +89,29 @@ function _ask_for_a_char() {
   read -r -s -n 1 _answer
 
   echo ${_answer}
+}
+
+# Prints all the local branches, excluding the current branch
+function _all_git_branches() {
+  git branch \
+  | sed 's/^[[:space:]][[:space:]][[:alnum:]]*\/[[:alnum:]]*\///g' \
+  | sed '/HEAD -> [[:alnum:]/]*/d' \
+  | sed '/^* [[:alnum:]]*/d'
+}
+
+# Counts the amount of the branches
+function _how_many_branches_match() {
+  local _matching_branches_count=0
+  local -a _all_branches=(`_all_git_branches`)
+
+ # iterating over all branches and counting
+ # no longer checking for matching name, so there is probably a better way to do this
+  for i in "${_all_branches[@]}"
+  do
+      ((_matching_branches_count++))
+  done
+
+  echo ${_matching_branches_count}
 }
 
 function _command_git_status() {
@@ -125,7 +149,7 @@ function _command_git_commit() {
 
   read _comment
 
-  if [ "${_comment}" != '' ]
+  if [[ -n ${_comment} ]];
   then
     git commit -m "${_comment}"
   fi
@@ -139,7 +163,7 @@ function _command_new_branch() {
 
   read _branch_name
 
-  if [ "${_branch_name}" != '' ]
+  if [[ -n ${_branch_name} ]];
   then
     git checkout -b "${_branch_name}" > /dev/null
   fi
@@ -150,52 +174,140 @@ function _command_git_list_branches() {
   _print_empty_line
 
   git branch
-
-  _print_empty_line
 }
 
 function _command_git_checkout() {
-  local -a _branch_name
+  local    _user_choice_branch_counter=0
+  local    _desired_branch_index
+  local -a _matching_branches
 
-  _print_empty_line
-  _print_input_request_message "Checkout branch named: "
+  # there is more than one other branch
+  if [[ `_how_many_branches_match` -gt 0 ]]; then
+    _print_startline_message "Please choose a branch to checkout: "
+    _print_empty_line
 
-  read _branch_name
+    # all the branches except the current
+    _matching_branches=(`_all_git_branches`)
 
-  if [ "${_branch_name}" != '' ]
-  then
-    git checkout "${_branch_name}" > /dev/null
+    while [[ 1 -eq 1 ]];
+    do
+      _user_choice_branch_counter=0
+
+      # printing all the branches
+      for branch in "${_matching_branches[@]}";
+      do
+          _print_newline_message "[${_user_choice_branch_counter}] \033[1;34m"${branch}"\033[0m"
+          ((_user_choice_branch_counter++))
+      done
+
+      _print_empty_line
+
+      # ask the user to input a branch index
+      _desired_branch_index=`_ask_for_a_char`
+
+        # if the branch exists with the entered index
+        if [[ -n "${_matching_branches[${_desired_branch_index}]}" ]];
+        then
+          git checkout "${_matching_branches[${_desired_branch_index}]}"
+          return 0
+        else
+          return 1
+        fi
+    done
   fi
+
+  _print_newline_message "No other local branches found."
 }
 
+# This duplicates a lot of the code from _command_git_checkout
+# but I haven't worked out how to separate out the branch selection
 function _command_git_merge() {
-  local -a _branch_name
+  local    _user_choice_branch_counter=0
+  local    _desired_branch_index
+  local -a _matching_branches
 
-  _print_empty_line
-  _print_startline_message "Current branch: `_current_branch`"
-  _print_input_request_message "Branch to merge in: "
+  # there is more than one other branch
+  if [[ `_how_many_branches_match` -gt 0 ]]; then
+    _print_startline_message "Current branch: \033[1;31m`_current_branch`\033[0m"
+    _print_startline_message "Please choose a branch to merge in: "
+    _print_empty_line
 
-  read _branch_name
+    # all the branches except the current
+    _matching_branches=(`_all_git_branches`)
 
-  if [ "${_branch_name}" != '' ]
-  then
-    git merge "${_branch_name}" > /dev/null
+    while [[ 1 -eq 1 ]];
+    do
+      _user_choice_branch_counter=0
+
+      # printing all the branches
+      for branch in "${_matching_branches[@]}";
+      do
+          _print_newline_message "[${_user_choice_branch_counter}] \033[1;34m"${branch}"\033[0m"
+          ((_user_choice_branch_counter++))
+      done
+
+      _print_empty_line
+
+      # ask the user to input a branch index
+      _desired_branch_index=`_ask_for_a_char`
+
+        # if the branch exists with the entered index
+        if [[ -n "${_matching_branches[${_desired_branch_index}]}" ]];
+        then
+          git merge "${_matching_branches[${_desired_branch_index}]}"
+          return 0
+        else
+          return 1
+        fi
+    done
   fi
+
+  _print_newline_message "No other local branches found."
 }
 
+# This duplicates a lot of the code from _command_git_checkout
+# but I haven't worked out how to separate out the branch selection
 function _command_git_delete_branch() {
-  local -a _branch_name
+  local    _user_choice_branch_counter=0
+  local    _desired_branch_index
+  local -a _matching_branches
 
-  _print_empty_line
-  _print_startline_message "Current branch: `_current_branch`"
-  _print_input_request_message "Branch to delete: "
+  # there is more than one other branch
+  if [[ `_how_many_branches_match` -gt 0 ]]; then
+    _print_startline_message "Please choose a branch to delete: "
+    _print_empty_line
 
-  read _branch_name
+    # all the branches except the current
+    _matching_branches=(`_all_git_branches`)
 
-  if [ "${_branch_name}" != "" ]
-  then
-    git branch -d "${_branch_name}" > /dev/null
+    while [[ 1 -eq 1 ]];
+    do
+      _user_choice_branch_counter=0
+
+      # printing all the branches
+      for branch in "${_matching_branches[@]}";
+      do
+          _print_newline_message "[${_user_choice_branch_counter}] \033[1;34m"${branch}"\033[0m"
+          ((_user_choice_branch_counter++))
+      done
+
+      _print_empty_line
+
+      # ask the user to input a branch index
+      _desired_branch_index=`_ask_for_a_char`
+
+        # if the branch exists with the entered index
+        if [[ -n "${_matching_branches[${_desired_branch_index}]}" ]];
+        then
+          git branch -d "${_matching_branches[${_desired_branch_index}]}"
+          return 0
+        else
+          return 1
+        fi
+    done
   fi
+
+  _print_newline_message "No other local branches found."
 }
 
 _clear_screen
