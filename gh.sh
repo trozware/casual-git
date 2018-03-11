@@ -185,7 +185,7 @@ function _command_git_list_branches() {
 }
 
 function _command_git_checkout() {
-  local    _user_choice_branch_counter=0
+  local    _user_choice_branch_counter=1
   local    _desired_branch_index
   local -a _matching_branches
 
@@ -230,7 +230,7 @@ function _command_git_checkout() {
 # This duplicates a lot of the code from _command_git_checkout
 # but I haven't worked out how to separate out the branch selection
 function _command_git_merge() {
-  local    _user_choice_branch_counter=0
+  local    _user_choice_branch_counter=1
   local    _desired_branch_index
   local -a _matching_branches
 
@@ -276,7 +276,7 @@ function _command_git_merge() {
 # This duplicates a lot of the code from _command_git_checkout
 # but I haven't worked out how to separate out the branch selection
 function _command_git_delete_branch() {
-  local    _user_choice_branch_counter=0
+  local    _user_choice_branch_counter=1
   local    _desired_branch_index
   local -a _matching_branches
 
