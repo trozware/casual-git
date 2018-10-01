@@ -3,7 +3,7 @@
 # Shows help to the user.
 function _show_usage() {
   _print_empty_line
-  _print_newline_message "\033[1;34mBranch: \033[1;31m`_current_branch` `_branch_is_clean`"
+  _print_newline_message "\033[1;33mBranch: \033[1;31m`_current_branch` `_branch_is_clean`"
   _print_empty_line
 
   _print_newline_message "\033[1;31ms \033[0m - status"
@@ -132,7 +132,7 @@ function _command_git_pretty_log() {
   git log \
   --color \
   --graph \
-  --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' \
+  --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold cyan)<%an>%Creset' \
   --abbrev-commit
 }
 
