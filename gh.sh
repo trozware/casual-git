@@ -204,7 +204,7 @@ function _command_git_checkout() {
       # printing all the branches
       for branch in "${_matching_branches[@]}";
       do
-          _print_newline_message "[${_user_choice_branch_counter}] \033[1;34m"${branch}"\033[0m"
+          _print_newline_message "[${_user_choice_branch_counter}] \033[1;31m"${branch}"\033[0m"
           ((_user_choice_branch_counter++))
       done
 
@@ -250,7 +250,7 @@ function _command_git_merge() {
       # printing all the branches
       for branch in "${_matching_branches[@]}";
       do
-          _print_newline_message "[${_user_choice_branch_counter}] \033[1;34m"${branch}"\033[0m"
+          _print_newline_message "[${_user_choice_branch_counter}] \033[1;31m"${branch}"\033[0m"
           ((_user_choice_branch_counter++))
       done
 
@@ -295,7 +295,7 @@ function _command_git_delete_branch() {
       # printing all the branches
       for branch in "${_matching_branches[@]}";
       do
-          _print_newline_message "[${_user_choice_branch_counter}] \033[1;34m"${branch}"\033[0m"
+          _print_newline_message "[${_user_choice_branch_counter}] \033[1;31m"${branch}"\033[0m"
           ((_user_choice_branch_counter++))
       done
 
