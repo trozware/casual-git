@@ -174,15 +174,15 @@ function _command_git_tag_push() {
 
   if [[ -n ${_tag} ]];
   then
-    _print_startline_message "Applying tag ${_tag}..."
+    _print_startline_message "Applying tag '${_tag}'..."
     git tag "${_tag}"
 
     _print_input_request_message "Push tag? y/n "
     read _do_push
 
-    if [[ ${_do_push} -eq 'y' ]];
+    if [[ ${_do_push} = 'y' ]];
     then
-      _print_startline_message "Pushing tag ${_tag}..."
+      _print_startline_message "Pushing tag '${_tag}'..."
       git push origin "${_tag}"
     fi
   fi
