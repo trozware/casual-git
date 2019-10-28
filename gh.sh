@@ -177,7 +177,7 @@ function _command_git_tag_push() {
     _print_startline_message "Applying tag ${_tag}..."
     git tag "${_tag}"
 
-    _print_input_request_message "Push tag? y/n"
+    _print_input_request_message "Push tag? y/n "
     read _do_push
 
     if [[ ${_do_push} -eq 'y' ]];
