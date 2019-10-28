@@ -12,6 +12,7 @@ function _show_usage() {
   _print_newline_message "\033[1;31mc \033[0m - commit"
   _print_newline_message "\033[1;31mp \033[0m - push"
   _print_newline_message "\033[1;31mu \033[0m - pull"
+  _print_newline_message "\033[1;31mt \033[0m - tag & push"
   _print_newline_message "\033[1;31mb \033[0m - list branches"
   _print_newline_message "\033[1;31mn \033[0m - create new branch"
   _print_newline_message "\033[1;31mk \033[0m - checkout branch"
@@ -104,8 +105,8 @@ function _how_many_branches_match() {
   local _matching_branches_count=0
   local -a _all_branches=(`_all_git_branches`)
 
- # iterating over all branches and counting
- # no longer checking for matching name, so there is probably a better way to do this
+  # iterating over all branches and counting
+  # no longer checking for matching name, so there is probably a better way to do this
   for i in "${_all_branches[@]}"
   do
       ((_matching_branches_count++))
@@ -160,6 +161,29 @@ function _command_git_commit() {
     if [[ -n ${_comment} ]];
     then
       git commit -am "${_comment}"
+    fi
+  fi
+}
+
+function _command_git_tag_push() {
+  local -a _tag
+  local -a _do_push
+
+  _print_input_request_message "Enter tag description: "
+  read _tag
+
+  if [[ -n ${_tag} ]];
+  then
+    _print_startline_message "Applying tag ${_tag}..."
+    git tag "${_tag}"
+
+    _print_input_request_message "Push tag? y/n"
+    read _do_push
+
+    if [[ ${_do_push} -eq 'y' ]];
+    then
+      _print_startline_message "Pushing tag ${_tag}..."
+      git push origin "${_tag}"
     fi
   fi
 }
@@ -337,6 +361,9 @@ do
       ;;
     u|U)
       _command_git_pull
+      ;;
+    t|T)
+      _command_git_tag_push
       ;;
     +|=)
       _command_git_add_all
