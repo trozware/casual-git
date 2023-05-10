@@ -2,6 +2,16 @@
 
 # Shows help to the user.
 function _show_usage() {
+  # if there is a current branch, show full usage
+  if [[ -n "`_current_branch`" ]];
+  then
+    _show_full_usage
+  else
+    _show_new_usage
+  fi
+}
+
+function _show_full_usage() {
   _print_empty_line
   _print_newline_message "\033[1;33mBranch: \033[1;31m`_current_branch` `_branch_is_clean`"
   _print_empty_line
