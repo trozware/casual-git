@@ -175,10 +175,8 @@ function _command_git_commit_or_clone() {
   # detect if there is a current branch
   if [[ -n "`_current_branch`" ]];
   then
-    _print_startline_message "Commiting..."
     _command_git_commit
   else
-    _print_startline_message "No current branch, cloning..."
     _command_git_clone
   fi
 }
@@ -215,7 +213,7 @@ function _command_git_clone() {
 
   if [[ -n ${_url} ]];
   then
-    _print_input_request_message "Enter the branch to clone (leave empty to use default):"
+    _print_input_request_message "Enter the branch to clone (leave empty to use default): "
     read _branch
 
     if [[ -n ${_branch} ]];
@@ -224,6 +222,9 @@ function _command_git_clone() {
     else
       git clone "${_url}"
     fi
+
+    # extract folder name from URL and cd to it
+    cd `echo "${_url}" | sed 's/.*\/\([^\/]*\)\.git/\1/'`
   fi
 }
 
@@ -439,7 +440,7 @@ do
       ;;
     c|C)
       _turn_on_user_input
-      _command_git_commit
+      _command_git_commit_or_clone
       ;;
     n|N)
       _turn_on_user_input

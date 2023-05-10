@@ -4,7 +4,7 @@ This is a fork of https://github.com/x0st/casual-git/network
 
 1. `git clone https://github.com/trozware/casual-git.git`
 2. `cd casual-git`
-3. `make`
+3. `make` (may need `sudo make` if you don't have write access to `/usr/local/bin`)
 4. Invoke the `gh` command within git repositories to open `casual-git`
 
 ### What did I want to change:
@@ -16,6 +16,12 @@ This is a fork of https://github.com/x0st/casual-git/network
 5. Allow creation of new branches and deletion of old branches.
 6. Add `git merge`.
 
+### Updates May 2023:
+
+- Better feedback for selecting options and cancelling operations.
+- If the current folder doesn't have a .git folder, then you get options to init or clone.
+- You can add a tag and push it (this has been there for a while, but I forgot to document it).
+
 ---
 
 # Original ReadMe
@@ -26,12 +32,12 @@ _casual-git_ is a bash script that helps you to automate interaction with Git. I
 
 It can:
 
-* `git push` or `git pull` or `git log` or `git commit` or `git commit --amend --no-edit` by only pressing 4 keys
-* `git push --force` or `git pull` + `git reset --hard origin/HEAD` by only pressing 5 keys
-* switch to a branch if you only remember a part of the full name
-* switch to one of branches matching a pattern
-* make a commit containing long file names with no need to enter them at all
-* fast and easily rebase onto a commit to modify its name or files
+- `git push` or `git pull` or `git log` or `git commit` or `git commit --amend --no-edit` by only pressing 4 keys
+- `git push --force` or `git pull` + `git reset --hard origin/HEAD` by only pressing 5 keys
+- switch to a branch if you only remember a part of the full name
+- switch to one of branches matching a pattern
+- make a commit containing long file names with no need to enter them at all
+- fast and easily rebase onto a commit to modify its name or files
 
 ```
   d  - push
