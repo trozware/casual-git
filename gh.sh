@@ -207,14 +207,22 @@ function _command_git_commit() {
 
 function _command_git_clone() {
   local -a _url
+  local -a _branch
 
-  _print_input_request_message "Enter the URL to clone: "
-
+  _print_input_request_message "Enter the URL to clone (leave empty to cancel): "
   read _url
 
   if [[ -n ${_url} ]];
   then
-    git clone "${_url}"
+    _print_input_request_message "Enter the branch to clone (leave empty to use default):"
+    read _branch
+
+    if [[ -n ${_branch} ]];
+    then
+      git clone -b "${_branch}" "${_url}"
+    else
+      git clone "${_url}"
+    fi
   fi
 }
 
@@ -365,7 +373,7 @@ function _command_git_delete_branch() {
 
   # there is more than one other branch
   if [[ `_how_many_branches_match` -gt 0 ]]; then
-    _print_startline_message "Please choose a branch to delete: "
+    _print_startline_message "Please choose a branch to delete (any other key to cancel): "
     _print_empty_line
 
     # all the branches except the current
