@@ -22,6 +22,18 @@ function _show_usage() {
   _print_empty_line
 }
 
+# Shows help when the folder is not a git repo.
+function _show_new_usage() {
+  _print_empty_line
+  _print_newline_message "\033[1;33mGit: \033[1;31mNot a git repo"
+  _print_empty_line
+
+  _print_newline_message "\033[1;31mc \033[0m - clone"
+  _print_newline_message "\033[1;31mi \033[0m - init"
+  _print_newline_message "... any other key to exit"
+  _print_empty_line
+}
+
 # Formatted cross or tick to put after current branch name
 function _branch_is_clean() {
   local status
@@ -119,6 +131,14 @@ function _command_git_status() {
   git status
 }
 
+function _command_git_init() {
+  _print_startline_message "Initing new git repo..."
+  git init
+  touch Readme.md
+  git add Readme.md
+  git commit -m "Initial commit"
+}
+
 function _command_git_push() {
   _print_startline_message "Pushing..."
   git push origin "`_current_branch`"
@@ -140,6 +160,16 @@ function _command_git_pretty_log() {
 function _command_git_add_all() {
   _print_startline_message "Adding all..."
   git add .
+}
+
+function _command_git_commit_or_clone() {
+  # detect if there is a current branch
+  if [[ -n "`_current_branch`" ]];
+  then
+    _command_git_commit
+  else
+    _command_git_clone
+  fi
 }
 
 function _command_git_commit() {
@@ -165,6 +195,19 @@ function _command_git_commit() {
   fi
 }
 
+function _command_git_clone() {
+  local -a _url
+
+  _print_input_request_message "Enter the URL to clone: "
+
+  read _url
+
+  if [[ -n ${_url} ]];
+  then
+    git clone "${_url}"
+  fi
+}
+
 function _command_git_tag_push() {
   local -a _tag
   local -a _do_push
@@ -185,19 +228,23 @@ function _command_git_tag_push() {
       _print_startline_message "Pushing tag '${_tag}'..."
       git push origin "${_tag}"
     fi
+  else
+    _print_startline_message "No tag applied."
   fi
 }
 
 function _command_new_branch() {
   local -a _branch_name
 
-  _print_input_request_message "Create new branch named: "
+  _print_input_request_message "Create new branch named (leave empty to cancel): "
 
   read _branch_name
 
   if [[ -n ${_branch_name} ]];
   then
     git checkout -b "${_branch_name}" > /dev/null
+  else
+    _print_startline_message "No branch created."
   fi
 }
 
@@ -215,7 +262,7 @@ function _command_git_checkout() {
 
   # there is more than one other branch
   if [[ `_how_many_branches_match` -gt 0 ]]; then
-    _print_startline_message "Please choose a branch to checkout: "
+    _print_startline_message "Please choose a branch to checkout (any other key to stay): "
     _print_empty_line
 
     # all the branches except the current
@@ -243,6 +290,7 @@ function _command_git_checkout() {
           git checkout "${_matching_branches[${_desired_branch_index}]}"
           return 0
         else
+          _print_startline_message "Staying on `_current_branch`"
           return 1
         fi
     done
@@ -289,6 +337,7 @@ function _command_git_merge() {
           git merge "${_matching_branches[${_desired_branch_index}]}"
           return 0
         else
+          _print_startline_message "Merge cancelled." 
           return 1
         fi
     done
@@ -334,6 +383,7 @@ function _command_git_delete_branch() {
           git branch -d "${_matching_branches[${_desired_branch_index}]}"
           return 0
         else
+          _print_startline_message "Delete cancelled."
           return 1
         fi
     done
@@ -390,6 +440,9 @@ do
     d|D)
       _turn_on_user_input
       _command_git_delete_branch
+      ;;
+    i|I)
+      _command_git_init
       ;;
     *)
       exit 0;
