@@ -2,7 +2,6 @@
 
 # Shows help to the user.
 function _show_usage() {
-  # if there is a current branch, show full usage
   if [[ -n "`_current_branch`" ]];
   then
     _show_full_usage
@@ -176,8 +175,10 @@ function _command_git_commit_or_clone() {
   # detect if there is a current branch
   if [[ -n "`_current_branch`" ]];
   then
+    _print_startline_message "Commiting..."
     _command_git_commit
   else
+    _print_startline_message "No current branch, cloning..."
     _command_git_clone
   fi
 }
