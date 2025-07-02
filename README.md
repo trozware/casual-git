@@ -5,7 +5,7 @@ This is a fork of https://github.com/x0st/casual-git/network
 1. `git clone https://github.com/trozware/casual-git.git`
 2. `cd casual-git`
 3. `make` (may need `sudo make` if you don't have write access to `/usr/local/bin`)
-4. Invoke the `gh` command within git repositories to open `casual-git`
+4. Invoke the `gitm` command within git repositories to open `casual-git`
 
 ### What did I want to change:
 
@@ -14,7 +14,9 @@ This is a fork of https://github.com/x0st/casual-git/network
 3. Implement a `git add .` option as the lazy way to avoid having to specify the files individually.
 4. Remove commands I rarely use.
 5. Allow creation of new branches and deletion of old branches.
-6. Add `git merge`.
+6. Add `git merge`. 
+7. Add tagging.
+8. Change name from `gh` to `gitm` (for git menu) to avoid conflicts with GitHub's `gh` command.
 
 ### Updates May 2023:
 

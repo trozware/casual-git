@@ -17,7 +17,7 @@ function _show_full_usage() {
 
   _print_newline_message "\033[1;31ms \033[0m - status"
   _print_newline_message "\033[1;31ml \033[0m - log"
-  _print_newline_message "\033[1;31m+ \033[0m - add"
+  _print_newline_message "\033[1;31ma \033[0m - add"
   _print_newline_message "\033[1;31mc \033[0m - commit"
   _print_newline_message "\033[1;31mp \033[0m - push"
   _print_newline_message "\033[1;31mu \033[0m - pull"
@@ -435,7 +435,7 @@ do
     t|T)
       _command_git_tag_push
       ;;
-    +|=)
+    +|=|a|A)
       _command_git_add_all
       ;;
     c|C)

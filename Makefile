@@ -1,6 +1,6 @@
 DUMMY_REBASE_EDITOR_NAME=casual-git-dummy-rebase-editor
 PREFIX=/usr/local
-NAME=gh
+NAME=gitm
 PWD=$(shell pwd)
 
 install: uninstall
